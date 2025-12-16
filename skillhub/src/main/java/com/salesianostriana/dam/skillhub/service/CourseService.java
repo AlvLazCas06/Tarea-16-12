@@ -61,4 +61,11 @@ public class CourseService {
         return courseRepository.save(course);
     }
 
+    public List<Course> getCoursesByCategory(Long id) {
+        return courseRepository.findAll()
+                .stream()
+                .filter(course -> course.getCategories().stream().anyMatch(category -> category.getId().equals(id)))
+                .toList();
+    }
+
 }

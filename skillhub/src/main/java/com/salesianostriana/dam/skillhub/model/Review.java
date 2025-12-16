@@ -15,18 +15,21 @@ import java.util.Objects;
 @Entity
 public class Review {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+    @EmbeddedId
+    private Pk reviewPk = new Pk();
 
     private String title;
 
     private String body;
 
     @ManyToOne
+    @MapsId("user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
+    @MapsId("course_id")
+    @JoinColumn(name = "course_id")
     private Course course;
 
     @Override
@@ -36,13 +39,13 @@ public class Review {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Review that = (Review) o;
-        return getId() != null && Objects.equals(getId(), that.getId());
+        Review review = (Review) o;
+        return getReviewPk() != null && Objects.equals(getReviewPk(), review.getReviewPk());
     }
 
     @Override
     public final int hashCode() {
-        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+        return Objects.hash(reviewPk);
     }
 
 }
